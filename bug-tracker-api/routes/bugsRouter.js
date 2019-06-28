@@ -1,19 +1,14 @@
 var express = require('express'),
-	router = express.Router();
-
-var bugsList = [
-	{id : 1, name : 'Server communication failure', isClosed : false}
-];
+	router = express.Router(),
+	bugService = require('../services/bugService');
 
 router.get('/', function(req, res, next){
+	var bugsList = bugService.getAll();
 	res.json(bugsList);
 });
 
 router.get('/:id', function(req, res, next){
-	var id = req.params.id;
-	var result = bugsList.find(function(bug){
-		return bug.id == id;
-	});
+	var result = bugService.get(req.params.id);
 	if (result){
 		res.json(result);
 	} else {
@@ -23,12 +18,7 @@ router.get('/:id', function(req, res, next){
 
 router.post('/', function(req, res, next){
 	var bugData = req.body;
-	if (!bugData.id){
-		bugData.id = bugsList.reduce(function(result, bug){
-			return result > bug.id ? result : bug.id;
-		}, 0) + 1;
-	}
-	bugsList.push(bugData);
+	var result = bugService.addNew(bugData);
 	res.status(201).json(bugData);
 });
 
