@@ -4,7 +4,13 @@ var http = require('http'),
 	url = require('url'),
 	querystring = require('querystring'),
 	calculator = require('./calculator');
-	
+
+/*
+	dataParser.js
+	serveStatic.js
+	calculatorReqHandler.js
+	notFoundHandler.js
+*/
 var staticExtns = ['.html', '.css', '.js', '.ico', '.jpg', '.png', '.xml', '.json'];
 
 function isStatic(resourceName){
