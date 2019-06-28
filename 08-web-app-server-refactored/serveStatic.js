@@ -8,7 +8,7 @@ function isStatic(resourceName){
 	return staticExtns.indexOf(resourceExtn) >= 0;
 }
 
-module.exports = function(req, res){
+module.exports = function(req, res, next){
 	var resourceName = req.urlObj.pathname === '/' ? '/index.html' : req.urlObj.pathname;
 	
 	if (isStatic(resourceName)){
@@ -20,5 +20,10 @@ module.exports = function(req, res){
 		}
 		var stream = fs.createReadStream(resourceFullName);
 		stream.pipe(res);	
+		stream.on('end', function(){
+			next();
+		});
+	} else {
+		next();
 	}
 };

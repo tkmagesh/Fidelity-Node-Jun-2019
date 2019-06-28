@@ -1,17 +1,17 @@
-var http = require('http'),
-	
+var http = require('http'),	
 	dataParser = require('./dataParser'),
 	serveStatic = require('./serveStatic'),
 	calculatorReqHandler = require('./calculatorReqHandler'),
-	notFoundHandler = require('./notFoundHandler');
+	notFoundHandler = require('./notFoundHandler'),
+	app = require('./app');
 
-var server = http.createServer(function(req , res ){
-	dataParser(req);
-	console.log(req.method + '\t' + req.urlObj.pathname);
-	serveStatic(req, res);
-	calculatorReqHandler(req, res);
-	notFoundHandler(res);	
-});
+app.use(dataParser);
+app.use(serveStatic);
+app.use(calculatorReqHandler);
+app.use(notFoundHandler);
+
+
+var server = http.createServer(app);
 
 server.listen(8080);
 server.on('listening', function(){
